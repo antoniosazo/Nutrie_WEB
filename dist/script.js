@@ -121,4 +121,26 @@
   }
 
   document.querySelectorAll('.map-layer').forEach(setup);
+
+  document.querySelectorAll('.cc-copy').forEach((btn) => {
+    let timer;
+    btn.addEventListener('click', async () => {
+      const text = btn.dataset.copy;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (e) {
+        const t = el('textarea');
+        t.value = text;
+        t.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(t);
+        t.select();
+        try { document.execCommand('copy'); } catch (err) { /* nothing else to try */ }
+        t.remove();
+      }
+      btn.classList.add('is-copied');
+      if (status) status.textContent = 'Correo copiado';
+      clearTimeout(timer);
+      timer = setTimeout(() => btn.classList.remove('is-copied'), 1800);
+    });
+  });
 })();
