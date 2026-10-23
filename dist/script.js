@@ -2,7 +2,7 @@
   const CITIES = [
     { id: 'la-serena', name: 'La Serena', region: 'Región de Coquimbo', kind: 'Planta Fertilizantes Líquidos', address: 'Los Talleres 2000, Barrio Industrial, Coquimbo', pin: [1328, 5417, 64, 80], label: [1551, 5418, 337, 79], side: 'r' },
     // Not in the map artwork: pin, line and pill are drawn by the script.
-    { id: 'santiago', name: 'Santiago', region: 'Región Metropolitana', kind: 'Oficina', pin: [1365, 5674, 64, 80], label: [880, 5674, 337, 79], side: 'l', extra: true },
+    { id: 'santiago', name: 'Santiago', region: 'Región Metropolitana', kind: 'Oficina', address: 'Av. Apoquindo 4700, Las Condes', pin: [1365, 5674, 64, 80], label: [880, 5674, 337, 79], side: 'l', extra: true },
     { id: 'malloco', name: 'Malloco', region: 'Región Metropolitana', kind: 'Planta Fertilizantes Líquidos', address: 'Camino Melipilla T57S, Ruta G-78 N° 7100, Talagante', pin: [1361, 5757, 64, 80], label: [1538, 5761, 337, 79], side: 'r' },
     { id: 'rancagua', name: 'Rancagua', region: 'Región de O’Higgins', kind: 'Centro de Distribución', address: 'Longitudinal Sur km 92, lote 3-B2, Gultro, Olivar', pin: [1290, 5822, 64, 80], label: [1538, 5862, 337, 79], side: 'r', extra: true },
     { id: 'san-fernando', name: 'San Fernando', region: 'Región de O’Higgins', kind: 'Planta Fertilizantes Líquidos', address: 'Ruta 5 Sur km 133, San Fernando', pin: [1224, 5838, 63, 80], label: [755, 5842, 338, 79], side: 'l' },
