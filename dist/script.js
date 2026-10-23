@@ -16,7 +16,8 @@
     ? `<span>${c.kind}</span><span class="mp-addr">${c.address}</span><a class="mp-maps" href="${mapsUrl(c)}" target="_blank" rel="noopener">Cómo llegar en Google Maps</a>`
     : `<span>${c.kind} · ${c.region}</span>`;
   const ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  const PIN = '<svg class="mp-mark" viewBox="0 0 64 80" aria-hidden="true"><path d="M32 2C15.4 2 2 15.4 2 32c0 20.5 30 46 30 46s30-25.5 30-46C62 15.4 48.6 2 32 2z" fill="#33a86b"/><circle cx="32" cy="30" r="11" fill="#e4e5e6"/></svg>';
+  const CLOSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>';
+  const PIN ='<svg class="mp-mark" viewBox="0 0 64 80" aria-hidden="true"><path d="M32 2C15.4 2 2 15.4 2 32c0 20.5 30 46 30 46s30-25.5 30-46C62 15.4 48.6 2 32 2z" fill="#33a86b"/><circle cx="32" cy="30" r="11" fill="#e4e5e6"/></svg>';
   const status = document.getElementById('map-status');
 
   function el(tag, cls, html) {
@@ -79,10 +80,7 @@
     });
 
     let current = null;
-    function select(id, announce) {
-      const g = groups.find((x) => x.c.id === id);
-      if (!g || current === id) return;
-      current = id;
+    function mark(g) {
       groups.forEach((o) => {
         const on = o === g;
         o.pill.setAttribute('aria-pressed', on);
@@ -91,12 +89,28 @@
         o.pill.classList.toggle('is-idle-drawn', (o.c.id === 'linares' || o.c.extra) && !on);
         o.pill.hidden = mode === 'card' && on;
       });
+    }
+    function close(e) {
+      const g = groups.find((x) => x.c.id === current);
+      current = null;
+      mark(null);
+      card.hidden = true;
+      // Keyboard activation (detail 0): keep focus near the map instead of losing it.
+      if (g && e.detail === 0) g.pill.focus();
+    }
+    function select(id, announce) {
+      const g = groups.find((x) => x.c.id === id);
+      if (!g || current === id) return;
+      current = id;
+      mark(g);
       if (card) {
+        card.hidden = false;
         const [lx, ly, lw, lh] = g.c.label;
         const left = g.c.side === 'r' ? lx : lx + lw - CARD_W;
         place(card, [left, ly - 30, CARD_W, 0]);
         card.style.height = 'auto';
-        card.innerHTML = `<strong>${g.c.name}</strong>${details(g.c)}<a class="mp-go" href="${contact}" aria-label="Contactar la sede de ${g.c.name}">${ARROW}</a>`;
+        card.innerHTML = `<strong>${g.c.name}</strong>${details(g.c)}<button class="mp-close" type="button" aria-label="Cerrar">${CLOSE}</button>`;
+        card.querySelector('.mp-close').addEventListener('click', close);
         card.classList.remove('is-pop'); void card.offsetWidth; card.classList.add('is-pop');
       }
       if (panel) {
