@@ -121,7 +121,7 @@ a { -webkit-tap-highlight-color: transparent; }
 /* Contact card: --f scales the 1280px desktop artwork (cqw) or a fixed unit on mobile */
 .contact-slice { container-type: inline-size; }
 .cc { --f: calc(100cqw / 1280); display: grid; gap: calc(var(--f) * 10); width: max-content; max-width: 100%; padding: calc(var(--f) * 18) calc(var(--f) * 20) calc(var(--f) * 20) calc(var(--f) * 24); color: #fff; font-family: "Nunito Sans", "Avenir", "Segoe UI", Arial, sans-serif; background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.05)); border: 1px solid rgba(255,255,255,.24); border-radius: calc(var(--f) * 26); box-shadow: 0 calc(var(--f) * 18) calc(var(--f) * 40) rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.18); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
-.cc-sedes { --f: calc(100cqw / 1280 * .78); position: absolute; left: 6.2%; top: 28%; }
+.cc-sedes { --f: calc(100cqw / 1280 * .78); position: absolute; z-index: 3; left: 6.2%; top: 28%; }
 .cc-light { color: #14281d; background: linear-gradient(135deg, #fff, #f1f8f4); border-color: rgba(51,168,107,.35); box-shadow: 0 calc(var(--f) * 14) calc(var(--f) * 30) rgba(30,110,70,.16); }
 .cc-light .cc-label { color: #1ca24a; }
 .cc-light .cc-mail { color: #14281d; }
