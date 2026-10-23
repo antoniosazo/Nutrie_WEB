@@ -122,6 +122,47 @@
 
   document.querySelectorAll('.map-layer').forEach(setup);
 
+  // Mail picker: the link keeps its mailto: href as fallback, JS swaps it for a menu.
+  const MAIL_TO = 'contacto@nutristream.cl';
+  const MAIL_APPS = [
+    { name: 'Gmail', href: `https://mail.google.com/mail/?view=cm&fs=1&to=${MAIL_TO}`, color: '#ea4335', web: true },
+    { name: 'Outlook', href: `https://outlook.office.com/mail/deeplink/compose?to=${MAIL_TO}`, color: '#0a64c8', web: true },
+    { name: 'App de correo', href: `mailto:${MAIL_TO}`, color: '#33a86b', web: false },
+  ];
+  const menus = [];
+  const closeMenus = (except) => menus.forEach((m) => {
+    if (m.menu === except) return;
+    m.menu.hidden = true;
+    m.link.setAttribute('aria-expanded', 'false');
+  });
+
+  document.querySelectorAll('.cc-mail').forEach((link) => {
+    const menu = el('div', 'cc-menu');
+    menu.hidden = true;
+    menu.setAttribute('role', 'menu');
+    menu.innerHTML = MAIL_APPS.map((a) => `<a role="menuitem" href="${a.href}"${a.web ? ' target="_blank" rel="noopener"' : ''}><i style="background:${a.color}"></i>${a.name}</a>`).join('');
+    link.closest('.cc').appendChild(menu);
+    link.setAttribute('aria-haspopup', 'menu');
+    link.setAttribute('aria-expanded', 'false');
+    menus.push({ menu, link });
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const open = menu.hidden;
+      closeMenus(menu);
+      menu.hidden = !open;
+      link.setAttribute('aria-expanded', String(open));
+      if (open && e.detail === 0) menu.querySelector('a').focus();
+    });
+    menu.addEventListener('click', (e) => { if (e.target.closest('a')) closeMenus(); });
+  });
+  document.addEventListener('click', (e) => { if (!e.target.closest('.cc')) closeMenus(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const open = menus.find((m) => !m.menu.hidden);
+    closeMenus();
+    if (open) open.link.focus();
+  });
+
   document.querySelectorAll('.cc-copy').forEach((btn) => {
     let timer;
     btn.addEventListener('click', async () => {
