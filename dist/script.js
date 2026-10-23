@@ -15,7 +15,6 @@
   const details = (c) => c.address
     ? `<span>${c.kind}</span><span class="mp-addr">${c.address}</span><a class="mp-maps" href="${mapsUrl(c)}" target="_blank" rel="noopener">Cómo llegar en Google Maps</a>`
     : `<span>${c.kind} · ${c.region}</span>`;
-  const ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const CLOSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>';
   const PIN ='<svg class="mp-mark" viewBox="0 0 64 80" aria-hidden="true"><path d="M32 2C15.4 2 2 15.4 2 32c0 20.5 30 46 30 46s30-25.5 30-46C62 15.4 48.6 2 32 2z" fill="#33a86b"/><circle cx="32" cy="30" r="11" fill="#e4e5e6"/></svg>';
   const status = document.getElementById('map-status');
@@ -29,7 +28,7 @@
 
   function setup(layer) {
     const W = +layer.dataset.w, H = +layer.dataset.h, ox = +layer.dataset.ox, oy = +layer.dataset.oy;
-    const mode = layer.dataset.mode, contact = layer.dataset.contact;
+    const mode = layer.dataset.mode;
     layer.style.setProperty('--w', W);
     const X = (x) => ((x - ox) / W * 100) + '%';
     const Y = (y) => ((y - oy) / H * 100) + '%';
@@ -114,7 +113,7 @@
         card.classList.remove('is-pop'); void card.offsetWidth; card.classList.add('is-pop');
       }
       if (panel) {
-        panel.innerHTML = `<div><strong>${g.c.name}</strong>${details(g.c)}</div><a class="m-btn m-btn-green" href="${contact}">Contactar sede ${ARROW}</a>`;
+        panel.innerHTML = `<div><strong>${g.c.name}</strong>${details(g.c)}</div>`;
       }
       if (announce && status) status.textContent = `Sede seleccionada: ${g.c.name}, ${g.c.address || g.c.region}`;
     }
