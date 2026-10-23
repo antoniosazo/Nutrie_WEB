@@ -79,10 +79,11 @@ a { -webkit-tap-highlight-color: transparent; }
 .mp-joint { position: absolute; background: #98d3b4; pointer-events: none; }
 .mp-pill { position: absolute; display: grid; place-items: center; margin: 0; padding: 0; border: 0; border-radius: 999px; background: transparent; color: transparent; font: 600 calc(var(--f) * 47) / 1 "Nunito Sans", "Avenir", Arial, sans-serif; cursor: pointer; transition: background .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease; -webkit-tap-highlight-color: transparent; }
 .mp-pill[hidden] { display: none; }
-.mp-pill.is-idle-linares { background: #a4a9aa; color: #fff; box-shadow: 0 calc(var(--f) * 8) calc(var(--f) * 14) rgba(0,0,0,.18); }
+.mp-pill.is-idle-drawn { background: #a4a9aa; color: #fff; box-shadow: 0 calc(var(--f) * 8) calc(var(--f) * 14) rgba(0,0,0,.18); }
 .mp-pill:hover, .mp-pill.is-hover, .mp-pill.is-active { background: #33a86b; color: #fff; box-shadow: 0 calc(var(--f) * 12) calc(var(--f) * 26) rgba(40,130,85,.38); transform: translateY(calc(var(--f) * -3)); }
 .mp-pill:focus-visible, .mp-go:focus-visible { outline: calc(var(--f) * 7) solid #1d6f45; outline-offset: calc(var(--f) * 5); }
 .mp-pin { position: absolute; margin: 0; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.mp-mark { position: absolute; inset: 0; display: block; width: 100%; height: 100%; filter: drop-shadow(0 calc(var(--f) * 3) calc(var(--f) * 4) rgba(0,0,0,.15)); }
 .mp-ring { position: absolute; left: 50%; top: 38%; width: calc(var(--f) * 170); height: calc(var(--f) * 170); border: calc(var(--f) * 6) solid #33a86b; border-radius: 50%; opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(.35); }
 .mp-pin.is-hover .mp-ring, .mp-pin.is-active .mp-ring { animation: mp-pulse 1.7s ease-out infinite; }
 .mp-card { position: absolute; display: grid; align-content: center; gap: calc(var(--f) * 8); padding: 0 calc(var(--f) * 140) 0 calc(var(--f) * 42); color: #fff; background: #33a86b; border-radius: calc(var(--f) * 38); box-shadow: 0 calc(var(--f) * 18) calc(var(--f) * 36) rgba(30,110,70,.35); transition: left .45s cubic-bezier(.2,.8,.2,1), top .45s cubic-bezier(.2,.8,.2,1); }

@@ -1,6 +1,8 @@
 (() => {
   const CITIES = [
     { id: 'la-serena', name: 'La Serena', region: 'Región de Coquimbo', pin: [1328, 5417, 64, 80], label: [1551, 5418, 337, 79], side: 'r' },
+    // Not in the map artwork: pin, line and pill are drawn by the script.
+    { id: 'santiago', name: 'Santiago', region: 'Región Metropolitana', pin: [1365, 5674, 64, 80], label: [880, 5674, 337, 79], side: 'l', extra: true },
     { id: 'malloco', name: 'Malloco', region: 'Región Metropolitana', pin: [1361, 5757, 64, 80], label: [1538, 5761, 337, 79], side: 'r' },
     { id: 'san-fernando', name: 'San Fernando', region: 'Región de O’Higgins', pin: [1224, 5838, 63, 80], label: [755, 5842, 338, 79], side: 'l' },
     { id: 'linares', name: 'Linares', region: 'Región del Maule', pin: [1308, 6015, 64, 80], label: [1680, 6022, 337, 79], side: 'r' },
@@ -9,6 +11,7 @@
   ];
   const CARD_W = 486, CARD_H = 222, DEFAULT_ID = 'linares';
   const ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const PIN = '<svg class="mp-mark" viewBox="0 0 64 80" aria-hidden="true"><path d="M32 2C15.4 2 2 15.4 2 32c0 20.5 30 46 30 46s30-25.5 30-46C62 15.4 48.6 2 32 2z" fill="#33a86b"/><circle cx="32" cy="30" r="11" fill="#e4e5e6"/></svg>';
   const status = document.getElementById('map-status');
 
   function el(tag, cls, html) {
@@ -42,11 +45,18 @@
     if (panel) layer.parentElement.insertAdjacentElement('afterend', panel);
 
     const groups = CITIES.map((c) => {
+      if (c.extra) {
+        const [px, , pw] = c.pin, [lx, ly, lw, lh] = c.label;
+        const x1 = c.side === 'r' ? px + pw / 2 : lx + lw, x2 = c.side === 'r' ? lx : px + pw / 2;
+        const line = el('div', 'mp-joint');
+        place(line, [x1, ly + lh / 2 - 2, x2 - x1, 4]);
+        layer.appendChild(line);
+      }
       const pill = el('button', 'mp-pill', c.name);
       pill.type = 'button';
       pill.dataset.id = c.id;
       place(pill, c.label);
-      const pin = el('button', 'mp-pin', '<i class="mp-ring"></i>');
+      const pin = el('button', 'mp-pin', (c.extra ? PIN : '') + '<i class="mp-ring"></i>');
       pin.type = 'button';
       pin.tabIndex = -1;
       pin.setAttribute('aria-label', c.name);
@@ -73,7 +83,7 @@
         o.pill.setAttribute('aria-pressed', on);
         o.pill.classList.toggle('is-active', on);
         o.pin.classList.toggle('is-active', on);
-        o.pill.classList.toggle('is-idle-linares', o.c.id === 'linares' && !on);
+        o.pill.classList.toggle('is-idle-drawn', (o.c.id === 'linares' || o.c.extra) && !on);
         o.pill.hidden = mode === 'card' && on;
       });
       if (card) {
