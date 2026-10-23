@@ -124,11 +124,31 @@
 
   // Mail picker: the link keeps its mailto: href as fallback, JS swaps it for a menu.
   const MAIL_TO = 'contacto@nutristream.cl';
+  const ua = navigator.userAgent;
+  const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/.test(ua);
+  // On phones try the native app first; the web link is the fallback.
   const MAIL_APPS = [
-    { name: 'Gmail', href: `https://mail.google.com/mail/?view=cm&fs=1&to=${MAIL_TO}`, color: '#ea4335', web: true },
-    { name: 'Outlook', href: `https://outlook.office.com/mail/deeplink/compose?to=${MAIL_TO}`, color: '#0a64c8', web: true },
-    { name: 'App de correo', href: `mailto:${MAIL_TO}`, color: '#33a86b', web: false },
+    {
+      name: 'Gmail', href: `https://mail.google.com/mail/?view=cm&fs=1&to=${MAIL_TO}`, color: '#ea4335', web: true,
+      app: isIOS ? `googlegmail:///co?to=${MAIL_TO}` : isAndroid ? `intent:#Intent;action=android.intent.action.SENDTO;data=mailto:${MAIL_TO};package=com.google.android.gm;end` : '',
+    },
+    {
+      name: 'Outlook', href: `https://outlook.office.com/mail/deeplink/compose?to=${MAIL_TO}`, color: '#0a64c8', web: true,
+      app: isIOS || isAndroid ? `ms-outlook://compose?to=${MAIL_TO}` : '',
+    },
+    { name: 'App de correo', href: `mailto:${MAIL_TO}`, color: '#33a86b', web: false, app: '' },
   ];
+  function openApp(appUrl, webUrl) {
+    let launched = false;
+    const mark = () => { launched = true; };
+    ['visibilitychange', 'pagehide', 'blur'].forEach((ev) => addEventListener(ev, mark, { once: true }));
+    location.href = appUrl;
+    setTimeout(() => {
+      if (launched || document.hidden) return;
+      if (!window.open(webUrl, '_blank')) location.href = webUrl;
+    }, 2200);
+  }
   const menus = [];
   const closeMenus = (except) => menus.forEach((m) => {
     if (m.menu === except) return;
@@ -140,7 +160,7 @@
     const menu = el('div', 'cc-menu');
     menu.hidden = true;
     menu.setAttribute('role', 'menu');
-    menu.innerHTML = MAIL_APPS.map((a) => `<a role="menuitem" href="${a.href}"${a.web ? ' target="_blank" rel="noopener"' : ''}><i style="background:${a.color}"></i>${a.name}</a>`).join('');
+    menu.innerHTML = MAIL_APPS.map((a) => `<a role="menuitem" href="${a.href}"${a.web ? ' target="_blank" rel="noopener"' : ''}${a.app ? ` data-app="${a.app}"` : ''}><i style="background:${a.color}"></i>${a.name}</a>`).join('');
     link.closest('.cc').appendChild(menu);
     link.setAttribute('aria-haspopup', 'menu');
     link.setAttribute('aria-expanded', 'false');
@@ -153,7 +173,15 @@
       link.setAttribute('aria-expanded', String(open));
       if (open && e.detail === 0) menu.querySelector('a').focus();
     });
-    menu.addEventListener('click', (e) => { if (e.target.closest('a')) closeMenus(); });
+    menu.addEventListener('click', (e) => {
+      const a = e.target.closest('a');
+      if (!a) return;
+      if (a.dataset.app) {
+        e.preventDefault();
+        openApp(a.dataset.app, a.href);
+      }
+      closeMenus();
+    });
   });
   document.addEventListener('click', (e) => { if (!e.target.closest('.cc')) closeMenus(); });
   document.addEventListener('keydown', (e) => {
