@@ -1,15 +1,20 @@
 (() => {
   const CITIES = [
-    { id: 'la-serena', name: 'La Serena', region: 'Región de Coquimbo', pin: [1328, 5417, 64, 80], label: [1551, 5418, 337, 79], side: 'r' },
+    { id: 'la-serena', name: 'La Serena', region: 'Región de Coquimbo', kind: 'Planta Fertilizantes Líquidos', address: 'Los Talleres 2000, Barrio Industrial, Coquimbo', pin: [1328, 5417, 64, 80], label: [1551, 5418, 337, 79], side: 'r' },
     // Not in the map artwork: pin, line and pill are drawn by the script.
-    { id: 'santiago', name: 'Santiago', region: 'Región Metropolitana', pin: [1365, 5674, 64, 80], label: [880, 5674, 337, 79], side: 'l', extra: true },
-    { id: 'malloco', name: 'Malloco', region: 'Región Metropolitana', pin: [1361, 5757, 64, 80], label: [1538, 5761, 337, 79], side: 'r' },
-    { id: 'san-fernando', name: 'San Fernando', region: 'Región de O’Higgins', pin: [1224, 5838, 63, 80], label: [755, 5842, 338, 79], side: 'l' },
-    { id: 'linares', name: 'Linares', region: 'Región del Maule', pin: [1308, 6015, 64, 80], label: [1680, 6022, 337, 79], side: 'r' },
-    { id: 'chillan', name: 'Chillán', region: 'Región de Ñuble', pin: [1166, 6056, 64, 80], label: [596, 6054, 338, 79], side: 'l' },
-    { id: 'lautaro', name: 'Lautaro', region: 'Región de La Araucanía', pin: [1238, 6326, 64, 80], label: [1456, 6322, 337, 79], side: 'r' },
+    { id: 'santiago', name: 'Santiago', region: 'Región Metropolitana', kind: 'Oficina', pin: [1365, 5674, 64, 80], label: [880, 5674, 337, 79], side: 'l', extra: true },
+    { id: 'malloco', name: 'Malloco', region: 'Región Metropolitana', kind: 'Planta Fertilizantes Líquidos', address: 'Camino Melipilla T57S, Ruta G-78 N° 7100, Talagante', pin: [1361, 5757, 64, 80], label: [1538, 5761, 337, 79], side: 'r' },
+    { id: 'rancagua', name: 'Rancagua', region: 'Región de O’Higgins', kind: 'Centro de Distribución', address: 'Longitudinal Sur km 92, lote 3-B2, Gultro, Olivar', pin: [1290, 5822, 64, 80], label: [1538, 5862, 337, 79], side: 'r', extra: true },
+    { id: 'san-fernando', name: 'San Fernando', region: 'Región de O’Higgins', kind: 'Planta Fertilizantes Líquidos', address: 'Ruta 5 Sur km 133, San Fernando', pin: [1224, 5838, 63, 80], label: [755, 5842, 338, 79], side: 'l' },
+    { id: 'linares', name: 'Linares', region: 'Región del Maule', kind: 'Oficina', address: 'Av. León Bustos 1607, Carretera 5 Sur, Linares', pin: [1308, 6015, 64, 80], label: [1680, 6022, 337, 79], side: 'r' },
+    { id: 'chillan', name: 'Chillán', region: 'Región de Ñuble', kind: 'Planta Fertilizantes Líquidos', address: 'Longitudinal Sur km 400, N° 3400, Chillán', pin: [1166, 6056, 64, 80], label: [596, 6054, 338, 79], side: 'l' },
+    { id: 'lautaro', name: 'Lautaro', region: 'Región de La Araucanía', kind: 'Planta Fertilizantes Líquidos', address: 'Parcela N° 11 El Cardal, km 654, Ruta 5 Sur, Lautaro', pin: [1238, 6326, 64, 80], label: [1456, 6322, 337, 79], side: 'r' },
   ];
-  const CARD_W = 486, CARD_H = 222, DEFAULT_ID = 'linares';
+  const CARD_W = 640, DEFAULT_ID = 'linares';
+  const mapsUrl = (c) => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.address + ', Chile');
+  const details = (c) => c.address
+    ? `<span>${c.kind}</span><span class="mp-addr">${c.address}</span><a class="mp-maps" href="${mapsUrl(c)}" target="_blank" rel="noopener">Cómo llegar en Google Maps</a>`
+    : `<span>${c.kind} · ${c.region}</span>`;
   const ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const PIN = '<svg class="mp-mark" viewBox="0 0 64 80" aria-hidden="true"><path d="M32 2C15.4 2 2 15.4 2 32c0 20.5 30 46 30 46s30-25.5 30-46C62 15.4 48.6 2 32 2z" fill="#33a86b"/><circle cx="32" cy="30" r="11" fill="#e4e5e6"/></svg>';
   const status = document.getElementById('map-status');
@@ -89,14 +94,15 @@
       if (card) {
         const [lx, ly, lw, lh] = g.c.label;
         const left = g.c.side === 'r' ? lx : lx + lw - CARD_W;
-        place(card, [left, ly + lh / 2 - 82, CARD_W, CARD_H]);
-        card.innerHTML = `<strong>${g.c.name}</strong><span>${g.c.region}</span><a class="mp-go" href="${contact}" aria-label="Contactar la sede de ${g.c.name}">${ARROW}</a>`;
+        place(card, [left, ly - 30, CARD_W, 0]);
+        card.style.height = 'auto';
+        card.innerHTML = `<strong>${g.c.name}</strong>${details(g.c)}<a class="mp-go" href="${contact}" aria-label="Contactar la sede de ${g.c.name}">${ARROW}</a>`;
         card.classList.remove('is-pop'); void card.offsetWidth; card.classList.add('is-pop');
       }
       if (panel) {
-        panel.innerHTML = `<div><strong>${g.c.name}</strong><span>${g.c.region}</span></div><a class="m-btn m-btn-green" href="${contact}">Contactar sede ${ARROW}</a>`;
+        panel.innerHTML = `<div><strong>${g.c.name}</strong>${details(g.c)}</div><a class="m-btn m-btn-green" href="${contact}">Contactar sede ${ARROW}</a>`;
       }
-      if (announce && status) status.textContent = `Sede seleccionada: ${g.c.name}, ${g.c.region}`;
+      if (announce && status) status.textContent = `Sede seleccionada: ${g.c.name}, ${g.c.address || g.c.region}`;
     }
     select(DEFAULT_ID, false);
   }
