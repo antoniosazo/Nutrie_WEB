@@ -1,17 +1,17 @@
 (() => {
   const CITIES = [
-    { id: 'la-serena', name: 'La Serena', region: 'Región de Coquimbo', kind: 'Planta Fertilizantes Líquidos', address: 'Los Talleres 2000, Barrio Industrial, Coquimbo', pin: [1328, 5417, 64, 80], label: [1551, 5418, 337, 79], side: 'r' },
+    { id: 'la-serena', url: 'https://maps.app.goo.gl/EKD7THRFyWHzJEid6', name: 'La Serena', region: 'Región de Coquimbo', kind: 'Planta Fertilizantes Líquidos', address: 'Los Talleres 2000, Barrio Industrial, Coquimbo', pin: [1276, 5417, 64, 80], label: [1551, 5418, 337, 79], side: 'r' },
     // Not in the map artwork: pin, line and pill are drawn by the script.
-    { id: 'santiago', name: 'Santiago', region: 'Región Metropolitana', kind: 'Oficina', address: 'Av. Apoquindo 4700, Las Condes', pin: [1365, 5674, 64, 80], label: [880, 5674, 337, 79], side: 'l', extra: true },
-    { id: 'malloco', name: 'Malloco', region: 'Región Metropolitana', kind: 'Planta Fertilizantes Líquidos', address: 'Camino Melipilla T57S, Ruta G-78 N° 7100, Talagante', pin: [1361, 5757, 64, 80], label: [1538, 5761, 337, 79], side: 'r' },
-    { id: 'rancagua', name: 'Rancagua', region: 'Región de O’Higgins', kind: 'Centro de Distribución', address: 'Longitudinal Sur km 92, lote 3-B2, Gultro, Olivar', pin: [1290, 5822, 64, 80], label: [1538, 5862, 337, 79], side: 'r', extra: true },
-    { id: 'san-fernando', name: 'San Fernando', region: 'Región de O’Higgins', kind: 'Planta Fertilizantes Líquidos', address: 'Ruta 5 Sur km 133, San Fernando', pin: [1224, 5838, 63, 80], label: [755, 5842, 338, 79], side: 'l' },
-    { id: 'linares', name: 'Linares', region: 'Región del Maule', kind: 'Oficina', address: 'Av. León Bustos 1607, Carretera 5 Sur, Linares', pin: [1308, 6015, 64, 80], label: [1680, 6022, 337, 79], side: 'r' },
-    { id: 'chillan', name: 'Chillán', region: 'Región de Ñuble', kind: 'Planta Fertilizantes Líquidos', address: 'Longitudinal Sur km 400, N° 3400, Chillán', pin: [1166, 6056, 64, 80], label: [596, 6054, 338, 79], side: 'l' },
-    { id: 'lautaro', name: 'Lautaro', region: 'Región de La Araucanía', kind: 'Planta Fertilizantes Líquidos', address: 'Parcela N° 11 El Cardal, km 654, Ruta 5 Sur, Lautaro', pin: [1238, 6326, 64, 80], label: [1456, 6322, 337, 79], side: 'r' },
+    { id: 'santiago', url: 'https://maps.app.goo.gl/1GzXKSrCsMXx7Ur56', name: 'Santiago', region: 'Región Metropolitana', kind: 'Oficina', address: 'Av. Apoquindo 4700, Las Condes', pin: [1365, 5674, 64, 80], label: [880, 5674, 337, 79], side: 'l', extra: true },
+    { id: 'malloco', url: 'https://maps.app.goo.gl/ECZUi8qZves4kLQF7', name: 'Malloco', region: 'Región Metropolitana', kind: 'Planta Fertilizantes Líquidos', address: 'Camino Melipilla T57S, Ruta G-78 N° 7100, Talagante', pin: [1331, 5773, 64, 80], label: [1538, 5761, 337, 79], side: 'r' },
+    { id: 'rancagua', url: 'https://maps.app.goo.gl/bNwVsALRwwHPFWG36', name: 'Rancagua', region: 'Región de O’Higgins', kind: 'Centro de Distribución', address: 'Longitudinal Sur km 92, lote 3-B2, Gultro, Olivar', pin: [1290, 5822, 64, 80], label: [1538, 5862, 337, 79], side: 'r', extra: true },
+    { id: 'san-fernando', url: 'https://maps.app.goo.gl/Nw37RFXuk2awhGco7', name: 'San Fernando', region: 'Región de O’Higgins', kind: 'Planta Fertilizantes Líquidos', address: 'Ruta 5 Sur km 133, San Fernando', pin: [1252, 5872, 63, 80], label: [755, 5842, 338, 79], side: 'l' },
+    { id: 'linares', url: 'https://maps.app.goo.gl/yji3gsad4Dw765AT8', name: 'Linares', region: 'Región del Maule', kind: 'Oficina', address: 'Av. León Bustos 1607, Carretera 5 Sur, Linares', pin: [1308, 6015, 64, 80], label: [1680, 6022, 337, 79], side: 'r' },
+    { id: 'chillan', url: 'https://maps.app.goo.gl/L3nh24BVjRPEeJoYA', name: 'Chillán', region: 'Región de Ñuble', kind: 'Planta Fertilizantes Líquidos', address: 'Longitudinal Sur km 400, N° 3400, Chillán', pin: [1218, 6056, 64, 80], label: [596, 6054, 338, 79], side: 'l' },
+    { id: 'lautaro', url: 'https://maps.app.goo.gl/N6LV64g8ejs6mVnw8', name: 'Lautaro', region: 'Región de La Araucanía', kind: 'Planta Fertilizantes Líquidos', address: 'Parcela N° 11 El Cardal, km 654, Ruta 5 Sur, Lautaro', pin: [1238, 6326, 64, 80], label: [1456, 6322, 337, 79], side: 'r' },
   ];
   const CARD_W = 640, DEFAULT_ID = 'linares';
-  const mapsUrl = (c) => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.address + ', Chile');
+  const mapsUrl = (c) => c.url || 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.address + ', Chile');
   const details = (c) => c.address
     ? `<span>${c.kind}</span><span class="mp-addr">${c.address}</span><a class="mp-maps" href="${mapsUrl(c)}" target="_blank" rel="noopener">Cómo llegar en Google Maps</a>`
     : `<span>${c.kind} · ${c.region}</span>`;
